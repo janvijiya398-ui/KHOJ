@@ -3,7 +3,6 @@ from flask_cors import CORS
 from dotenv import load_dotenv
 from supabase import create_client
 import os
-import re
 
 load_dotenv()
 
@@ -11,6 +10,13 @@ SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+
+app = Flask(__name__)
+CORS(app)
+
+
+# ---------------- AI EVENT CLASSIFICATION ----------------
+
 def classify_event(event_text):
     text = event_text.lower()
 
@@ -33,9 +39,8 @@ def classify_event(event_text):
 
     return "External Event"
 
-app = Flask(__name__)
-CORS(app)
 
+# ---------------- HOME ROUTE ----------------
 
 @app.route("/")
 def home():
@@ -44,26 +49,66 @@ def home():
     })
 
 
+# ---------------- TEST DATABASE ----------------
+
 @app.route("/test-db")
 def test_db():
-    response = supabase.table("events").select("*").execute()
-    print(response.data)
+    try:
+        response = supabase.table("events").select("*").execute()
 
-    return jsonify({
-        "message": "Database connection successful!",
-        "events": response.data
-    })
+        return jsonify({
+            "message": "Database connection successful!",
+            "events": response.data
+        })
 
-@app.route("/events")
+    except Exception as error:
+        return jsonify({
+            "error": str(error)
+        }), 500
+
+
+# ---------------- GET APPROVED EVENTS ----------------
+
+@app.route("/events", methods=["GET"])
 def get_events():
-    response = supabase.table("events") \
-        .select("*") \
-        .eq("status", "approved") \
-        .execute()
+    try:
+        response = supabase.table("events") \
+            .select("*") \
+            .eq("status", "approved") \
+            .execute()
 
-    return jsonify({
-        "events": response.data
-    })
+        return jsonify({
+            "events": response.data
+        })
+
+    except Exception as error:
+        return jsonify({
+            "error": str(error)
+        }), 500
+
+
+# ---------------- GET PENDING EVENTS ----------------
+
+@app.route("/pending-events", methods=["GET"])
+def get_pending_events():
+    try:
+        response = supabase.table("events") \
+            .select("*") \
+            .eq("status", "pending") \
+            .execute()
+
+        return jsonify({
+            "pending_events": response.data
+        })
+
+    except Exception as error:
+        return jsonify({
+            "error": str(error)
+        }), 500
+
+
+# ---------------- ADD NEW EVENT ----------------
+
 @app.route("/add-event", methods=["POST"])
 def add_event():
     try:
@@ -99,36 +144,87 @@ def add_event():
             "error": str(error)
         }), 500
 
-    
 
-    
+# ---------------- APPROVE EVENT ----------------
+
 @app.route("/approve-event/<event_id>", methods=["PATCH"])
 def approve_event(event_id):
-    response = supabase.table("events") \
-        .update({"status": "approved"}) \
-        .eq("id", event_id) \
-        .execute()
+    try:
+        response = supabase.table("events") \
+            .update({"status": "approved"}) \
+            .eq("id", event_id) \
+            .execute()
 
-    return jsonify({
-        "message": "Event approved successfully!",
-        "event": response.data
-    })
+        if not response.data:
+            return jsonify({
+                "error": "Event not found!"
+            }), 404
+
+        return jsonify({
+            "message": "Event approved successfully!",
+            "event": response.data
+        })
+
+    except Exception as error:
+        return jsonify({
+            "error": str(error)
+        }), 500
+
+
+# ---------------- REJECT EVENT ----------------
+
+@app.route("/reject-event/<event_id>", methods=["PATCH"])
+def reject_event(event_id):
+    try:
+        response = supabase.table("events") \
+            .update({"status": "rejected"}) \
+            .eq("id", event_id) \
+            .execute()
+
+        if not response.data:
+            return jsonify({
+                "error": "Event not found!"
+            }), 404
+
+        return jsonify({
+            "message": "Event rejected successfully!",
+            "event": response.data
+        })
+
+    except Exception as error:
+        return jsonify({
+            "error": str(error)
+        }), 500
+
+
+# ---------------- AI CLASSIFICATION API ----------------
+
 @app.route("/classify-event", methods=["POST"])
 def classify_event_api():
-    data = request.get_json()
+    try:
+        data = request.get_json()
 
-    title = data.get("title", "")
-    description = data.get("description", "")
-    organizer = data.get("organizer", "")
-    venue = data.get("venue", "")
+        title = data.get("title", "")
+        description = data.get("description", "")
+        organizer = data.get("organizer", "")
+        venue = data.get("venue", "")
 
-    event_text = f"{title} {description} {organizer} {venue}"
+        event_text = f"{title} {description} {organizer} {venue}"
 
-    event_type = classify_event(event_text)
+        event_type = classify_event(event_text)
 
-    return jsonify({
-        "message": "Event classified successfully!",
-        "event_type": event_type
-    })
+        return jsonify({
+            "message": "Event classified successfully!",
+            "event_type": event_type
+        })
+
+    except Exception as error:
+        return jsonify({
+            "error": str(error)
+        }), 500
+
+
+# ---------------- RUN SERVER ----------------
+
 if __name__ == "__main__":
     app.run(debug=True)
