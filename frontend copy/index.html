@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KHOJ - Events</title>
+</head>
+<body>
+
+    <h1>Welcome to KHOJ</h1>
+
+    <h2>Approved Events</h2>
+    <h2>Test Event Classification</h2>
+
+<button onclick="classifyEvent()">Classify Event</button>
+
+<p id="classificationResult"></p>
+
+
+
+<h2>Add an Event</h2>
+
+<input id="title" type="text" placeholder="Event Title">
+<br><br>
+
+<textarea id="description" placeholder="Event Description"></textarea>
+<br><br>
+
+<input id="organizer" type="text" placeholder="Organizer">
+<br><br>
+
+<input id="venue" type="text" placeholder="Venue">
+<br><br>
+
+<button onclick="classifyRealEvent()">Classify My Event</button>
+
+<p id="realClassificationResult"></p>
+<br><br>
+
+<button onclick="submitEvent()">Submit Event</button>
+
+<p id="submitResult"></p>
+
+    <div id="events">
+        Loading events...
+    </div>
+
+    <script>
+        fetch("http://127.0.0.1:5000/events")
+            .then(response => response.json())
+            .then(data => {
+                const eventsContainer = document.getElementById("events");
+
+                eventsContainer.innerHTML = "";
+
+                data.events.forEach(event => {
+                    const eventCard = document.createElement("div");
+
+                    eventCard.innerHTML = `
+                        <h3>${event.title}</h3>
+                        <p>${event.description}</p>
+                        <p><b>Category:</b> ${event.category}</p>
+                        <p><b>Date:</b> ${event.event_date}</p>
+                        <p><b>Mode:</b> ${event.mode}</p>
+                        <p><b>Organizer:</b> ${event.organizer}</p>
+                        <p><b>Fee:</b> ${event.is_paid ? event.fee : "Free"}</p>
+                        <a href="${event.registration_link}" target="_blank">
+                            Register Here
+                        </a>
+                        <hr>
+                    `;
+
+                    eventsContainer.appendChild(eventCard);
+                });
+            })
+            .catch(error => {
+                document.getElementById("events").innerText =
+                    "Unable to load events.";
+                console.error(error);
+            });
+                    async function classifyEvent() {
+            const response = await fetch(
+                "http://http://localhost:5000/classify-event",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        title: "IGDTUW Robotics Workshop",
+                        description: "A campus workshop",
+                        organizer: "IGDTUW Student Club",
+                        venue: "IGDTUW Auditorium"
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            document.getElementById("classificationResult").innerText =
+                "Event Type: " + data.event_type;
+        }
+                async function classifyRealEvent() {
+            const response = await fetch(
+                "http://127.0.0.1:5000/classify-event",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        title: document.getElementById("title").value,
+                        description: document.getElementById("description").value,
+                        organizer: document.getElementById("organizer").value,
+                        venue: document.getElementById("venue").value
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            document.getElementById("realClassificationResult").innerText =
+                "Event Type: " + data.event_type;
+        }
+                async function submitEvent() {
+            const response = await fetch(
+                "http://127.0.0.1:5000/add-event",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        title: document.getElementById("title").value,
+                        description: document.getElementById("description").value,
+                        organizer: document.getElementById("organizer").value,
+                        venue: document.getElementById("venue").value,
+                        event_type: "University Event",
+                        category: "Technology",
+                        event_date: "2026-10-10T10:00:00+00:00",
+                        registration_deadline: "2026-10-09T23:59:00+00:00",
+                        mode: "Offline",
+                        is_paid: false,
+                        fee: 0,
+                        official_link: "",
+                        registration_link: "",
+                        ai_summary: ""
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            document.getElementById("submitResult").innerText =
+                data.message;
+        }
+    </script>
+
+</body>
+</html>
