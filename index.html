@@ -4,46 +4,1132 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KHOJ - Events</title>
+    <style>
+        * {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #27202e;
+  background: #fff9f0;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.hidden {
+  display: none !important;
+}
+
+
+/* LOGIN */
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 25px;
+
+  background:
+    radial-gradient(circle at 10% 15%, #ff7818 0 10%, transparent 30%),
+    radial-gradient(circle at 90% 85%, #8d39ff 0 12%, transparent 32%),
+    linear-gradient(135deg, #fff2df, #ffdc9b);
+}
+
+.login-card {
+  width: min(430px, 100%);
+  background: rgba(255,255,255,.96);
+  padding: 40px;
+  border-radius: 32px;
+  text-align: center;
+
+  box-shadow: 0 25px 70px rgba(60,20,80,.20);
+
+  animation: pop .5s ease;
+}
+
+.login-logo {
+  width: 70px;
+  height: 70px;
+  margin: auto;
+
+  display: grid;
+  place-items: center;
+
+  color: white;
+  font-size: 32px;
+  font-weight: 900;
+
+  border-radius: 20px;
+
+  background: linear-gradient(135deg,#7025ff,#b74dff);
+
+  box-shadow: 0 10px 25px rgba(110,30,255,.3);
+}
+
+.login-card h1 {
+  font-size: 30px;
+}
+
+.login-card h1 span {
+  color: #8b35f2;
+}
+
+.login-card p {
+  color: #777;
+  line-height: 1.5;
+}
+
+.login-card label {
+  display: block;
+  text-align: left;
+  font-weight: bold;
+  margin: 18px 0 7px;
+}
+
+.login-card input {
+  width: 100%;
+  padding: 14px;
+
+  border: 2px solid #eee;
+  border-radius: 14px;
+  outline: none;
+}
+
+.login-card input:focus {
+  border-color: #9237f5;
+  box-shadow: 0 0 0 4px rgba(146,55,245,.1);
+}
+
+.password-wrap {
+  position: relative;
+}
+
+.password-wrap input {
+  padding-right: 50px;
+}
+
+.password-wrap button {
+  position: absolute;
+  right: 7px;
+  top: 7px;
+
+  border: 0;
+  background: transparent;
+}
+
+.gradient-btn {
+  width: 100%;
+  border: 0;
+
+  margin-top: 20px;
+  padding: 15px;
+
+  color: white;
+  font-weight: 900;
+
+  border-radius: 15px;
+
+  background: linear-gradient(90deg,#7225ff,#b44cff);
+
+  box-shadow: 0 9px 22px rgba(110,35,240,.25);
+
+  transition: .2s;
+}
+
+.gradient-btn:hover {
+  transform: translateY(-2px) scale(1.01);
+}
+
+.login-card small {
+  display: block;
+  color: #999;
+  margin-top: 15px;
+}
+
+
+/* NAVBAR */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  min-height: 70px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 18px;
+
+  padding: 10px 4%;
+
+  background: rgba(255,255,255,.95);
+
+  backdrop-filter: blur(15px);
+
+  border-bottom: 1px solid #eee;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  color: #7035a7;
+  font-size: 21px;
+  font-weight: 900;
+}
+
+.brand-logo {
+  width: 38px;
+  height: 38px;
+
+  display: grid;
+  place-items: center;
+
+  color: white;
+
+  border-radius: 11px;
+
+  background: linear-gradient(135deg,#7425ff,#b44cff);
+}
+
+.navbar nav {
+  display: flex;
+  flex: 1;
+  gap: 4px;
+
+  overflow-x: auto;
+}
+
+.nav-btn {
+  border: 0;
+  background: transparent;
+
+  padding: 10px 13px;
+
+  border-radius: 13px;
+
+  color: #706775;
+
+  font-weight: bold;
+
+  white-space: nowrap;
+}
+
+.nav-btn:hover,
+.nav-btn.active {
+  color: #7426df;
+  background: #f0e3ff;
+}
+
+.nav-right {
+  position: relative;
+  display: flex;
+  gap: 8px;
+}
+
+.round-btn,
+.avatar {
+  width: 40px;
+  height: 40px;
+
+  border: 0;
+  border-radius: 50%;
+}
+
+.round-btn {
+  background: #f2eaff;
+}
+
+.avatar {
+  color: white;
+  background: #7437e5;
+  font-weight: bold;
+}
+
+.profile-menu {
+  position: absolute;
+
+  right: 0;
+  top: 48px;
+
+  width: 180px;
+
+  padding: 14px;
+
+  border-radius: 17px;
+
+  background: white;
+
+  box-shadow: 0 15px 40px rgba(0,0,0,.15);
+
+  display: none;
+}
+
+.profile-menu.show {
+  display: block;
+  animation: pop .2s;
+}
+
+.profile-menu button {
+  width: 100%;
+
+  margin-top: 10px;
+
+  border: 0;
+  border-radius: 10px;
+
+  padding: 10px;
+
+  color: #d33;
+  background: #fff0f0;
+}
+
+
+/* HERO */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+
+  text-align: center;
+
+  padding: 50px 5% 40px;
+
+  background:
+    linear-gradient(145deg,#ff7418,#ffad5f 58%,#ffe77b);
+}
+
+.orange-ball {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(235,75,10,.25);
+}
+
+.ball-one {
+  width: 230px;
+  height: 230px;
+  right: -50px;
+  top: -90px;
+}
+
+.ball-two {
+  width: 160px;
+  height: 160px;
+  left: -60px;
+  bottom: -70px;
+}
+
+.hero-badge {
+  position: relative;
+
+  display: inline-block;
+
+  padding: 10px 18px;
+
+  border-radius: 30px;
+
+  color: #8531d9;
+  background: white;
+
+  font-weight: bold;
+
+  box-shadow: 0 6px 18px rgba(0,0,0,.08);
+}
+
+.hero h1 {
+  position: relative;
+
+  font-size: clamp(40px,7vw,65px);
+
+  margin: 22px 0 8px;
+}
+
+.hero h1 span {
+  color: #8b32ef;
+}
+
+.hero p {
+  position: relative;
+
+  max-width: 700px;
+
+  margin: auto;
+
+  line-height: 1.6;
+
+  color: #695c58;
+}
+
+.search-box {
+  position: relative;
+
+  max-width: 700px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  margin: 25px auto 15px;
+
+  padding: 6px 15px;
+
+  border-radius: 17px;
+
+  background: white;
+
+  box-shadow: 0 8px 25px rgba(0,0,0,.12);
+}
+
+.search-box input {
+  width: 100%;
+
+  border: 0;
+  outline: 0;
+
+  padding: 13px;
+
+  background: transparent;
+}
+
+.event-switch {
+  display: inline-flex;
+
+  padding: 5px;
+
+  border-radius: 16px;
+
+  background: rgba(255,255,255,.7);
+}
+
+.switch-btn {
+  border: 0;
+
+  padding: 11px 17px;
+
+  border-radius: 11px;
+
+  background: transparent;
+
+  font-weight: bold;
+}
+
+.switch-btn.active {
+  color: #7425dc;
+  background: white;
+}
+
+.categories {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  margin-top: 25px;
+}
+
+.category {
+  border: 0;
+
+  padding: 10px 16px;
+
+  border-radius: 25px;
+
+  background: white;
+
+  font-weight: bold;
+
+  box-shadow: 0 4px 12px rgba(0,0,0,.07);
+
+  transition: .2s;
+}
+
+.category:hover {
+  transform: translateY(-3px);
+}
+
+.category.active {
+  color: white;
+
+  background: linear-gradient(90deg,#7525ff,#b24aff);
+}
+
+
+/* CONTENT */
+
+.content {
+  max-width: 1250px;
+
+  margin: auto;
+
+  padding: 35px 5%;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 20px;
+}
+
+.section-heading h2 {
+  margin: 0;
+  font-size: 27px;
+}
+
+.view-all {
+  border: 0;
+  background: transparent;
+
+  color: #7928dd;
+
+  font-weight: bold;
+}
+
+
+/* EVENT CARDS */
+
+.events-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2,minmax(0,1fr));
+
+  gap: 20px;
+}
+
+.event-card {
+  background: white;
+
+  padding: 18px;
+
+  border-radius: 22px;
+
+  border-top: 6px solid #8438ee;
+
+  box-shadow: 0 8px 25px rgba(60,35,80,.10);
+
+  transition: .25s;
+
+  animation: pop .35s ease;
+}
+
+.event-card:nth-child(2) {
+  border-color: #45d4ac;
+}
+
+.event-card:nth-child(3) {
+  border-color: #ffb348;
+}
+
+.event-card:nth-child(4) {
+  border-color: #63a4ff;
+}
+
+.event-card:hover {
+  transform: translateY(-6px);
+
+  box-shadow: 0 17px 35px rgba(60,35,80,.15);
+}
+
+.event-top {
+  display: flex;
+  justify-content: space-between;
+}
+
+.event-category {
+  padding: 7px 12px;
+
+  border-radius: 20px;
+
+  color: white;
+
+  background: #8438ee;
+
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.save-btn {
+  width: 37px;
+  height: 37px;
+
+  border: 0;
+
+  border-radius: 50%;
+
+  background: #fff0f6;
+
+  font-size: 20px;
+}
+
+.save-btn.saved {
+  background: #eadcff;
+}
+
+.event-card h3 {
+  margin: 14px 0 10px;
+}
+
+.event-info {
+  color: #777;
+
+  font-size: 14px;
+
+  line-height: 1.9;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 6px;
+
+  margin: 12px 0;
+}
+
+.tag {
+  padding: 5px 9px;
+
+  border-radius: 12px;
+
+  background: #f5f1f7;
+
+  font-size: 11px;
+}
+
+.prize {
+  padding: 10px;
+
+  margin-bottom: 10px;
+
+  border-radius: 12px;
+
+  background: #fff8e5;
+
+  font-weight: bold;
+}
+
+.details-btn {
+  width: 100%;
+
+  border: 0;
+
+  padding: 13px;
+
+  border-radius: 14px;
+
+  color: white;
+
+  background: linear-gradient(90deg,#7526ff,#b34cff);
+
+  font-weight: bold;
+}
+
+
+/* PAGES */
+
+.page {
+  display: none;
+
+  min-height: 80vh;
+
+  padding: 45px 5%;
+}
+
+.active-page {
+  display: block;
+}
+
+.page-container,
+.form-container {
+  max-width: 900px;
+
+  margin: auto;
+
+  padding: 30px;
+
+  border-radius: 25px;
+
+  background: white;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+}
+
+.page-container .events-grid {
+  margin-top: 25px;
+}
+
+.page-icon {
+  font-size: 50px;
+}
+
+.form-container input,
+.form-container textarea,
+.form-container select {
+  width: 100%;
+
+  margin: 7px 0;
+
+  padding: 14px;
+
+  border: 2px solid #eee;
+
+  border-radius: 14px;
+
+  outline: none;
+}
+
+.form-container textarea {
+  min-height: 130px;
+  resize: vertical;
+}
+
+.admin-box {
+  display: flex;
+
+  gap: 15px;
+
+  padding: 18px;
+
+  margin-top: 12px;
+
+  border-radius: 17px;
+
+  background: #faf6ff;
+}
+
+
+/* EMPTY */
+
+.empty {
+  grid-column: 1/-1;
+
+  padding: 60px 20px;
+
+  border-radius: 25px;
+
+  text-align: center;
+
+  background: white;
+}
+
+.empty-icon {
+  font-size: 55px;
+}
+
+
+/* TOAST */
+
+#toast {
+  position: fixed;
+
+  z-index: 9999;
+
+  left: 50%;
+  bottom: 25px;
+
+  transform: translate(-50%,30px);
+
+  padding: 13px 20px;
+
+  border-radius: 30px;
+
+  color: white;
+
+  background: #29212f;
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  transition: .3s;
+}
+
+#toast.show {
+  opacity: 1;
+
+  transform: translate(-50%,0);
+}
+
+
+/* BUBBLES */
+
+.bubble {
+  position: fixed;
+
+  z-index: 99999;
+
+  width: 10px;
+  height: 10px;
+
+  border-radius: 50%;
+
+  background: #a949ff;
+
+  pointer-events: none;
+
+  animation: bubble .7s ease-out forwards;
+}
+
+@keyframes bubble {
+
+  to {
+    opacity: 0;
+
+    transform:
+      translate(var(--x),var(--y))
+      scale(2);
+  }
+
+}
+
+@keyframes pop {
+
+  from {
+    opacity: 0;
+    transform: scale(.94);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+}
+
+
+/* MOBILE */
+
+@media(max-width:800px) {
+
+  .navbar {
+    flex-wrap: wrap;
+
+    padding: 9px 12px;
+  }
+
+  .brand {
+    width: 100%;
+  }
+
+  .navbar nav {
+    width: 100%;
+
+    order: 3;
+  }
+
+  .nav-right {
+    position: absolute;
+
+    right: 10px;
+    top: 10px;
+  }
+
+  .hero {
+    padding: 35px 14px;
+  }
+
+  .hero h1 {
+    font-size: 40px;
+  }
+
+  .categories {
+    justify-content: flex-start;
+
+    flex-wrap: nowrap;
+
+    overflow-x: auto;
+
+    padding-bottom: 8px;
+  }
+
+  .category {
+    white-space: nowrap;
+  }
+
+  .events-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .content {
+    padding: 28px 13px;
+  }
+
+  .page {
+    padding: 25px 13px;
+  }
+
+  .page-container,
+  .form-container {
+    padding: 22px;
+  }
+
+}
+    </style>
 </head>
 <body>
 
-    <h1>Welcome to KHOJ</h1>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KHOJ — Campus Events</title>
+  <link rel="stylesheet" href="style.css">
+</head>
 
-    <h2>Approved Events</h2>
-    <h2>Test Event Classification</h2>
+<body>
 
-<button onclick="classifyEvent()">Classify Event</button>
+<!-- LOGIN -->
+<div id="loginPage" class="login-page">
+  <div class="login-card">
+    <div class="login-logo">K</div>
+    <h1>Welcome to <span>KHOJ</span></h1>
+    <p>Discover. Save. Never miss a campus event.</p>
 
-<p id="classificationResult"></p>
+    <form id="loginForm">
+      <label>Email</label>
+      <input id="email" type="email" placeholder="you@example.com" required>
+
+      <label>Password</label>
+      <div class="password-wrap">
+        <input id="password" type="password" placeholder="••••••••" required>
+        <button type="button" id="togglePassword">👁</button>
+      </div>
+
+      <button class="gradient-btn" type="submit">Sign In ✨</button>
+    </form>
+
+    <small>Demo frontend — backend can be connected later.</small>
+  </div>
+</div>
 
 
+<!-- APP -->
+<div id="app" class="hidden">
 
-<h2>Add an Event</h2>
+  <!-- NAVBAR -->
+  <header class="navbar">
 
-<input id="title" type="text" placeholder="Event Title">
-<br><br>
-
-<textarea id="description" placeholder="Event Description"></textarea>
-<br><br>
-
-<input id="organizer" type="text" placeholder="Organizer">
-<br><br>
-
-<input id="venue" type="text" placeholder="Venue">
-<br><br>
-
-<button onclick="classifyRealEvent()">Classify My Event</button>
-
-<p id="realClassificationResult"></p>
-<br><br>
-
-<button onclick="submitEvent()">Submit Event</button>
-
-<p id="submitResult"></p>
-
-    <div id="events">
-        Loading events...
+    <div class="brand">
+      <div class="brand-logo">K</div>
+      <span>KHOJ</span>
     </div>
+
+    <nav>
+      <button class="nav-btn active" data-page="home">🏠 Home</button>
+      <button class="nav-btn" data-page="university">🎓 University</button>
+      <button class="nav-btn" data-page="external">🌎 External</button>
+      <button class="nav-btn" data-page="saved">💜 Saved</button>
+      <button class="nav-btn" data-page="submit">➕ Submit</button>
+      <button class="nav-btn" data-page="admin">⚙️ Admin</button>
+    </nav>
+
+    <div class="nav-right">
+      <button id="soundBtn" class="round-btn">🔊</button>
+
+      <button id="profileBtn" class="avatar">PS</button>
+
+      <div id="profileMenu" class="profile-menu">
+        <b>My Account</b>
+        <button id="logoutBtn">🚪 Sign Out</button>
+      </div>
+    </div>
+
+  </header>
+
+
+  <!-- HOME -->
+  <section id="home" class="page active-page">
+
+    <div class="hero">
+
+      <div class="orange-ball ball-one"></div>
+      <div class="orange-ball ball-two"></div>
+
+      <div class="hero-badge">✨ AI-Powered Campus Events</div>
+
+      <h1>Your Campus, <span>Amplified.</span></h1>
+
+      <p>
+        Never miss a hackathon, fest, workshop or deadline again.
+        Discover, save and register — all in one place.
+      </p>
+
+      <div class="search-box">
+        🔎
+        <input id="searchInput"
+          type="text"
+          placeholder="Search events, clubs, categories...">
+      </div>
+
+      <div class="event-switch">
+        <button class="switch-btn active">🎓 University Events</button>
+        <button class="switch-btn">🌎 External Events</button>
+      </div>
+
+      <div class="categories">
+        <button class="category active" data-category="All">🌈 All</button>
+        <button class="category" data-category="Hackathon">⚡ Hackathon</button>
+        <button class="category" data-category="Workshop">🛠 Workshop</button>
+        <button class="category" data-category="Competition">🏆 Competition</button>
+        <button class="category" data-category="Fest">🎉 Fest</button>
+        <button class="category" data-category="Research">🔬 Research</button>
+        <button class="category" data-category="Internship">💼 Internship</button>
+        <button class="category" data-category="Seminar">🎤 Seminar</button>
+      </div>
+
+    </div>
+
+
+    <div class="content">
+
+      <div class="section-heading">
+        <h2>⭐ Featured Events</h2>
+        <button class="view-all">View all →</button>
+      </div>
+
+      <div id="eventsGrid" class="events-grid"></div>
+
+    </div>
+
+  </section>
+
+
+  <!-- UNIVERSITY -->
+  <section id="university" class="page">
+
+    <div class="page-container">
+      <div class="page-icon">🎓</div>
+      <h1>University Events</h1>
+      <p>Discover events happening across your university.</p>
+
+      <div id="universityGrid" class="events-grid"></div>
+    </div>
+
+  </section>
+
+
+  <!-- EXTERNAL -->
+  <section id="external" class="page">
+
+    <div class="page-container">
+      <div class="page-icon">🌎</div>
+      <h1>External Events</h1>
+      <p>Explore opportunities beyond your campus.</p>
+
+      <div id="externalGrid" class="events-grid"></div>
+    </div>
+
+  </section>
+
+
+  <!-- SAVED -->
+  <section id="saved" class="page">
+
+    <div class="page-container">
+      <div class="page-icon">💜</div>
+      <h1>Saved Events</h1>
+      <p>Your favourite events will appear here.</p>
+
+      <div id="savedGrid" class="events-grid"></div>
+    </div>
+
+  </section>
+
+
+  <!-- SUBMIT -->
+  <section id="submit" class="page">
+
+    <div class="form-container">
+
+      <div class="page-icon">➕</div>
+
+      <h1>Submit an Event</h1>
+      <p>Share a useful opportunity with students.</p>
+
+      <input placeholder="Event name">
+      <input placeholder="Organizer">
+      <input type="date">
+      <input placeholder="Location">
+
+      <select>
+        <option>Hackathon</option>
+        <option>Workshop</option>
+        <option>Competition</option>
+        <option>Fest</option>
+        <option>Research</option>
+        <option>Internship</option>
+        <option>Seminar</option>
+      </select>
+
+      <textarea placeholder="Describe your event..."></textarea>
+
+      <button id="submitEvent" class="gradient-btn">
+        Submit Event 🚀
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- ADMIN -->
+  <section id="admin" class="page">
+
+    <div class="page-container">
+
+      <div class="page-icon">⚙️</div>
+
+      <h1>Admin Dashboard</h1>
+      <p>Manage submitted campus events.</p>
+
+      <div class="admin-box">
+        <span>🟢</span>
+        <div>
+          <b>Event Approval</b>
+          <p>Connect this to your existing backend approval API.</p>
+        </div>
+      </div>
+
+      <div class="admin-box">
+        <span>🔴</span>
+        <div>
+          <b>Event Rejection</b>
+          <p>Connect this to your existing backend rejection API.</p>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+
+
+<div id="toast"></div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
 
     <script>
         fetch("http://127.0.0.1:5000/events")
