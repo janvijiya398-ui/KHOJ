@@ -123,7 +123,7 @@ let events = [
 
 /* BACKEND API */
 
-const API_URL = "http://127.0.0.1:5000";
+const API_URL = "https://khoj-jii2.onrender.com";
 
 async function loadEventsFromAPI() {
   try {
